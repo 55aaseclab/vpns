@@ -1,0 +1,18 @@
+services:
+  vpn-epfl:
+    build: .
+    container_name: vpn-epfl
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:3049:3049"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ip", "link", "show", "tun0"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
